@@ -1,9 +1,11 @@
 #include <stdbool.h>
 
 #include <SDL3/SDL.h>
+#include <SDL3/SDL_keyboard.h>
 #include <SDL3_image/SDL_image.h>
 
 #include "ui.h"
+#include "champ.h"
 
 void framerate_cap(Uint8 fps, Uint32 frame_start){
 	Uint32 frame_time = SDL_GetTicks() - frame_start;
@@ -27,6 +29,9 @@ int main(int argc, char* argv[]){
 	Img cursor = new_img(rend, "assets/cursor.png");
 	SDL_SetWindowIcon(win, icon.surf);
 
+	Champ champ = new_champ(rend, "frank");
+
+	const bool* keystates = SDL_GetKeyboardState(NULL);
 	float mouse_x;
 	float mouse_y;
 	float old_mouse_x;
@@ -38,6 +43,7 @@ int main(int argc, char* argv[]){
 	while(running){
 		frame_start = SDL_GetTicks();
 
+		keystates = SDL_GetKeyboardState(NULL);
 		old_mouse_x = mouse_x;
 		old_mouse_y = mouse_y;
 		SDL_GetMouseState(&mouse_x, &mouse_y);
@@ -48,10 +54,14 @@ int main(int argc, char* argv[]){
 					break;
 			}
 		}
+		control_champ(&champ, keystates);
 		SDL_SetRenderDrawColor(rend, 255, 0, 0, 1);
 		SDL_RenderClear(rend);
 
 		render_img(rend, &logo, 100, 100, 256, 32);
+
+		move_champ(&champ);
+		render_champ(rend, &champ);
 
 		render_cursor(rend, cursor, mouse_x, mouse_y, old_mouse_x, old_mouse_y);
 		SDL_RenderPresent(rend);
