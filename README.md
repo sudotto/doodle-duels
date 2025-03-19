@@ -1,2 +1,1 @@
-# scribble-skirmish
-fighting game
+# Doodle Duels
