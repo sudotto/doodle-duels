@@ -1,6 +1,8 @@
 #include <string.h>
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_keyboard.h>
@@ -10,52 +12,84 @@
 
 #include "champ.h"
 
-Champ new_champ(SDL_Renderer* rend, char* name){
+Champ new_champ(SDL_Renderer* rend, char* name, float max_spd, float accel){
 	Champ champ;
 	champ.x = 10;
 	champ.y = 10;
+	champ.w = 64;
+	champ.h = 64;
 	champ.x_vel = 0;
 	champ.y_vel = 0;
-	champ.max_spd = 1;
-	champ.accel = 1;
-	champ.idle[LEFT] = new_cropped_img(rend, "assets/frank/idle.png", 0, 0, 32 * 10, 32 * 10);
-	champ.idle[RIGHT] = new_cropped_img(rend, "assets/frank/idle.png", 0, 32 * 10, 32 * 10, 32 * 10);
+	champ.max_spd = max_spd / 100;
+	champ.accel = accel / 100;
+	champ.in_air = false;
+
+	char* dirname = malloc(sizeof(char) * 20);
+	// If in the future you are searching through the files wondering why a new character's sprites won't load this malloc might be why
+	strcpy(dirname, "assets/");
+	strcat(dirname, name);
+
+	char* filename = malloc(sizeof(char) * 20);
+	strcpy(filename, dirname);
+	strcat(filename, "/idle.png");
+	champ.idle[LEFT] = new_cropped_img(rend, filename, 0, 0, 32 * 10, 32 * 10);
+	champ.idle[RIGHT] = new_cropped_img(rend, filename, 0, 32 * 10, 32 * 10, 32 * 10);
 	champ.facing = RIGHT;
 	return champ;
 }
 
 void control_champ(Champ* champ, const bool* keystates){
 	if(keystates[SDL_SCANCODE_W]){
-	} else if(keystates[SDL_SCANCODE_A]){
-		if(champ->x_vel != champ->max_spd){
-			champ->x_vel -= champ->accel;
+		if(!champ->in_air){
+			champ->y_vel = -0.15;
+		}
+	}
+	if(keystates[SDL_SCANCODE_A]){
+		champ->x_vel -= champ->accel; 
+		if(abs(champ->x_vel) > champ->max_spd){
+			champ->x_vel = -champ->max_spd; 
 		}
 		champ->facing = LEFT;
-	} else if(keystates[SDL_SCANCODE_S]){
-	} else if(keystates[SDL_SCANCODE_D]){
-		if(champ->x_vel != champ->max_spd){
-			champ->x_vel += champ->accel; 
+	}
+	if(keystates[SDL_SCANCODE_S]){
+	}
+	if(keystates[SDL_SCANCODE_D]){
+		champ->x_vel += champ->accel; 
+		if(abs(champ->x_vel) > champ->max_spd){
+			champ->x_vel = champ->max_spd; 
 		}
 		champ->facing = RIGHT;
 	}
 }
 
 void move_champ(Champ* champ){
-	int friction = 1;
-	champ->x += champ->x_vel;
+	int floor = 300;
+	float gravity = 0.0001;
+	int friction = 5;
+
 	champ->y += champ->y_vel;
-	if(champ->x_vel > friction){
+	champ->y_vel += gravity;
+	if(champ->y + champ->h > floor){
+		champ->y = floor - champ->h;
+		champ->y_vel = 0;
+		champ->in_air = false;
+	} else {
+		champ->in_air = true;
+	}
+
+	if(champ->in_air){
+		champ->x_vel *= 2;
+	}
+	champ->x += champ->x_vel;
+	if(champ->x_vel < -friction){
 		champ->x_vel += friction;
-	} else if(champ->x_vel < -friction){
+	} else if(champ->x_vel > friction){
 		champ->x_vel -= friction;
 	} else {
 		champ->x_vel = 0;
 	}
-	if(champ->y_vel != 0){
-		champ->y_vel -= 1;
-	}
 }
 
 void render_champ(SDL_Renderer* rend, Champ* champ){
-	render_img(rend, &champ->idle[champ->facing], champ->x, champ->y, 64, 64);
+	render_img(rend, &champ->idle[champ->facing], champ->x, champ->y, champ->w, champ->h);
 }

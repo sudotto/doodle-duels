@@ -29,7 +29,8 @@ int main(int argc, char* argv[]){
 	Img cursor = new_img(rend, "assets/cursor.png");
 	SDL_SetWindowIcon(win, icon.surf);
 
-	Champ champ = new_champ(rend, "frank");
+	Champ champ = new_champ(rend, "frank", 100, 10);
+	Champ champ_farnk = new_champ(rend, "frank", 100, 0);
 
 	const bool* keystates = SDL_GetKeyboardState(NULL);
 	float mouse_x;
@@ -55,10 +56,14 @@ int main(int argc, char* argv[]){
 			}
 		}
 		control_champ(&champ, keystates);
+		control_champ(&champ_farnk, keystates);
 		SDL_SetRenderDrawColor(rend, 255, 0, 0, 1);
 		SDL_RenderClear(rend);
 
 		render_img(rend, &logo, 100, 100, 256, 32);
+		
+		move_champ(&champ_farnk);
+		render_champ(rend, &champ_farnk);
 
 		move_champ(&champ);
 		render_champ(rend, &champ);
