@@ -20,12 +20,13 @@ typedef struct {
 	int h;
 	float x_vel;
 	float y_vel;
-	float max_spd;
+	float walk_spd;
+	float jump_spd;
 	float accel;
 	bool in_air;
 } Champ;
 
-Champ new_champ(SDL_Renderer* rend, char* name, float max_spd, float accel);
+Champ new_champ(SDL_Renderer* rend, char* name, float walk_spd, float accel);
 void control_champ(Champ* champ, const bool* keystates);
 void move_champ(Champ* champ);
 void render_champ(SDL_Renderer* rend, Champ* champ);
