@@ -49,14 +49,14 @@ void render_img(SDL_Renderer* rend, Img *img, int x, int y, int w, int h){
 // ANIMATION
 ///////////////////
 
-Anim new_anim(SDL_Renderer* rend, char* filename, int framecount, int w, int h){
+Anim new_anim(SDL_Renderer* rend, char* filename, int framecount, int row, int w, int h){
 	Anim anim;
 	anim.frames = malloc(sizeof(Img) * framecount);
 	anim.frame = 0;
 	anim.framecount = framecount;
 
 	for(int x = 0; x < framecount; x++){
-		anim.frames[x] = new_cropped_img(rend, filename, x * w, 0, w, h);
+		anim.frames[x] = new_cropped_img(rend, filename, x * w, row * h, w, h);
 	}
 	return anim;
 }

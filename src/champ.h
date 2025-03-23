@@ -12,7 +12,7 @@ typedef enum {
 
 typedef struct {
 	char* name;
-	Img idle[2][4];
+	Anim idle[2];
 	Img (*anim)[2][4];
 	float anim_frame;
 	Facing facing;
@@ -32,7 +32,6 @@ typedef struct {
 Champ new_champ(SDL_Renderer* rend, char* name, float walk_spd, float accel);
 void control_champ(Champ* champ, const bool* keystates);
 void move_champ(Champ* champ);
-void animate_champ(Champ* champ, float frame_rate);
 void render_champ(SDL_Renderer* rend, Champ* champ);
 
 #endif

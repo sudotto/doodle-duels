@@ -31,7 +31,7 @@ typedef struct {
 	int framecount;
 } Anim;
 
-Anim new_anim(SDL_Renderer* rend, char* filename, int framecount, int w, int h);
+Anim new_anim(SDL_Renderer* rend, char* filename, int framecount, int row, int w, int h);
 void render_anim(SDL_Renderer* rend, Anim* anim, int x, int y, int w, int h, float framerate);
 void del_anim(Anim* anim);
 

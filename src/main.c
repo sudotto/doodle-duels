@@ -62,7 +62,6 @@ int main(int argc, char* argv[]){
 		render_img(rend, &logo, 100, 100, 256, 32);
 		
 		move_champ(&champ);
-		animate_champ(&champ, 0.02);
 		render_champ(rend, &champ);
 
 		render_cursor(rend, cursor, mouse_x, mouse_y, old_mouse_x, old_mouse_y);

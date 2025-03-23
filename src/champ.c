@@ -33,20 +33,18 @@ Champ new_champ(SDL_Renderer* rend, char* name, float walk_spd, float accel){
 	strcpy(dirname, "assets/");
 	strcat(dirname, name);
 
-	char* filename = malloc(sizeof(char) * 20);
-	strcpy(filename, dirname);
-	strcat(filename, "/idle.png");
+	char* filepath = malloc(sizeof(char) * 20);
+	strcpy(filepath, dirname);
+	strcat(filepath, "/punch.png");
 
 	for(int y = 0; y < 2; y++){
-		for(int x = 0; x < 4; x++){
-			champ.idle[y][x] = new_cropped_img(rend, filename, x * 32 * 10, y * 32 * 10, 32 * 10, 32 * 10);
-		}
+		champ.idle[y] = new_anim(rend, filepath, 4, y, 32 * 10, 32 * 10);
 	}
 
 	free(dirname);
-	free(filename);
+	free(filepath);
 
-	champ.anim = &champ.idle;
+	//champ.anim = &champ.idle;
 
 	return champ;
 }
@@ -104,14 +102,6 @@ void move_champ(Champ* champ){
 	}
 }
 
-
-void animate_champ(Champ* champ, float frame_rate){
-	champ->anim_frame += frame_rate;
-	if(champ->anim_frame > 3){
-		champ->anim_frame = 0;
-	}
-}
-
 void render_champ(SDL_Renderer* rend, Champ* champ){
-	render_img(rend, &champ->idle[champ->facing][(int)floor(champ->anim_frame)], champ->x, champ->y, champ->w, champ->h);
+	render_anim(rend, &champ->idle[champ->facing], champ->x, champ->y, champ->w, champ->h, 0.1);
 }
