@@ -1,9 +1,16 @@
+#include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
+#include <math.h>
 
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 
 #include "ui.h"
+
+///////////////////
+// IMAGE
+///////////////////
 
 Img new_img(SDL_Renderer* rend, char* file){
 	Img img;
@@ -36,4 +43,32 @@ void render_img(SDL_Renderer* rend, Img *img, int x, int y, int w, int h){
 	} else {
 		SDL_RenderTexture(rend, img->tex, NULL, &dest);
 	}
+}
+
+///////////////////
+// ANIMATION
+///////////////////
+
+Anim new_anim(SDL_Renderer* rend, char* filename, int framecount, int w, int h){
+	Anim anim;
+	anim.frames = malloc(sizeof(Img) * framecount);
+	anim.frame = 0;
+	anim.framecount = framecount;
+
+	for(int x = 0; x < framecount; x++){
+		anim.frames[x] = new_cropped_img(rend, filename, x * w, 0, w, h);
+	}
+	return anim;
+}
+
+void render_anim(SDL_Renderer* rend, Anim* anim, int x, int y, int w, int h, float framerate){
+	anim->frame += framerate;
+	if(anim->frame > anim->framecount){
+		anim->frame = 0;
+	}
+	render_img(rend, &anim->frames[(int)floor(anim->frame)], x, y, w, h);
+}
+
+void del_anim(Anim* anim){
+	free(anim->frames);
 }
