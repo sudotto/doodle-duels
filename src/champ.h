@@ -13,7 +13,7 @@ typedef enum {
 typedef struct {
 	char* name;
 	Anim idle[2];
-	Img (*anim)[2][4];
+	Anim (*anim)[2];
 	float anim_frame;
 	Facing facing;
 	float x;

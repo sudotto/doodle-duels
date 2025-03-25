@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
@@ -66,7 +67,11 @@ void render_anim(SDL_Renderer* rend, Anim* anim, int x, int y, int w, int h, flo
 	if(anim->frame > anim->framecount){
 		anim->frame = 0;
 	}
-	render_img(rend, &anim->frames[(int)floor(anim->frame)], x, y, w, h);
+	Img test = new_img(rend, "assets/frank/idle.png");
+	int frame = (int)floor(anim->frame);
+	printf("%f\n", anim->frame);
+	//render_img(rend, &anim->frames[frame], x, y, w, h);
+	render_img(rend, &test, x, y, w, h);
 }
 
 void del_anim(Anim* anim){
