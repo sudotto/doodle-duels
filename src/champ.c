@@ -44,12 +44,7 @@ Champ new_champ(SDL_Renderer* rend, char* name, float walk_spd, float accel){
 	free(dirname);
 	free(filepath);
 
-	champ.anim = malloc(sizeof(Anim) * 2);
-	champ.anim = &champ.idle;
-	printf("%f\n", champ.idle->frame);
-	if(!champ.idle->frames[0].cropped){
-		printf("this bitch uninitialized");
-	}
+	champ.anim = champ.idle;
 
 	return champ;
 }
@@ -108,5 +103,5 @@ void move_champ(Champ* champ){
 }
 
 void render_champ(SDL_Renderer* rend, Champ* champ){
-	render_anim(rend, &*champ->anim[champ->facing], champ->x, champ->y, champ->w, champ->h, 0.1);
+	render_anim(rend, &champ->idle[champ->facing], champ->x, champ->y, champ->w, champ->h, 0.1);
 }

@@ -64,14 +64,13 @@ Anim new_anim(SDL_Renderer* rend, char* filename, int framecount, int row, int w
 
 void render_anim(SDL_Renderer* rend, Anim* anim, int x, int y, int w, int h, float framerate){
 	anim->frame += framerate;
-	if(anim->frame > anim->framecount){
+	if(anim->frame >= anim->framecount){
 		anim->frame = 0;
 	}
 	Img test = new_img(rend, "assets/frank/idle.png");
 	int frame = (int)floor(anim->frame);
-	printf("%f\n", anim->frame);
-	//render_img(rend, &anim->frames[frame], x, y, w, h);
-	render_img(rend, &test, x, y, w, h);
+	printf("%i\n", frame);
+	render_img(rend, &anim->frames[frame], x, y, w, h);
 }
 
 void del_anim(Anim* anim){
