@@ -32,15 +32,16 @@ Champ new_champ(SDL_Renderer* rend, char* name, float walk_spd, float accel){
 	strcpy(dirname, "assets/");
 	strcat(dirname, name);
 
-	char* filepath = malloc(sizeof(char) * 20);
+	char* filepath = malloc(sizeof(char) * 30);
 
-	char* filenames[3] = {
+	char* filenames[4] = {
 		"/idle.png",
 		"/walk.png",
-		"/punch.png"
+		"/punch.png",
+		"/falling.png"
 	};
 
-	for(int anim = 0; anim < 3; anim++){
+	for(int anim = 0; anim < 4; anim++){
 		for(int facing = 0; facing < 2; facing++){
 			strcpy(filepath, dirname);
 			strcat(filepath, filenames[anim]);
@@ -79,6 +80,9 @@ void control_champ(Champ* champ, const bool* keystates){
 		}
 		champ->anim = WALK;
 		champ->facing = RIGHT;
+	}
+	if(!champ->grounded){
+		champ->anim = FALLING;
 	}
 }
 

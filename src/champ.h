@@ -13,12 +13,13 @@ typedef enum {
 typedef enum {
 	IDLE,
 	WALK,
-	PUNCH
+	PUNCH,
+	FALLING
 } Curr_anim;
 
 typedef struct {
 	char* name;
-	Anim anims[3][2];
+	Anim anims[4][2];
 	Curr_anim anim;
 	Facing facing;
 	float x;
