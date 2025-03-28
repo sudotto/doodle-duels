@@ -10,11 +10,16 @@ typedef enum {
 	RIGHT
 } Facing;
 
+typedef enum {
+	IDLE,
+	WALK,
+	PUNCH
+} Curr_anim;
+
 typedef struct {
 	char* name;
-	Anim idle[2];
-	Anim *anim;
-	float anim_frame;
+	Anim anims[3][2];
+	Curr_anim anim;
 	Facing facing;
 	float x;
 	float y;
@@ -26,7 +31,7 @@ typedef struct {
 	int air_spd;
 	int jump_spd;
 	float accel;
-	bool in_air;
+	bool grounded;
 } Champ;
 
 Champ new_champ(SDL_Renderer* rend, char* name, float walk_spd, float accel);
